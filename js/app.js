@@ -1,5 +1,7 @@
 const main = document.getElementById("main");
 const container = document.getElementById("container");
+const letterFill = document.getElementsByClassName("letter-fill");
+const letterEmpty = document.getElementsByClassName("letter-empty");
 const slides = document.getElementsByClassName("slides");
 const btnPrev = document.getElementById("prev");
 const btnNext = document.getElementById("next");
@@ -11,7 +13,7 @@ dragDrop();
 function showAnimals() {
   data.map(item => {
     const section = document.createElement("section");
-  
+
     section.classList.add("slides");
     section.style["background-image"] = `linear-gradient(#fff 10%, ${item.backg} 50%)`;
 
@@ -20,13 +22,13 @@ function showAnimals() {
       <div class="content">
         <img src="./assets/img/${item.img}" alt=${item.name} class="img-animal">
 
-        <ul class="word-empty">${word.map(el => `
-          <li class="letter-empty" id="${Math.floor(Math.random() * 1000) + 1}">${el}</li>
+        <ul class="word-empty">${word.map(letter => `
+          <li class="letter-empty" id="${Math.floor(Math.random() * 1000) + 1}">${letter}</li>
         `).join(" ")}</ul>
 
-        <ul class="word-fill">${word.map(el => `
-          <li class="letter-fill" draggable="true" id="${Math.floor(Math.random() * 1000) + 1}">${el}</li>
-        `).join(" ")}</ul>
+        <ul class="word-fill">${word.map(letter => `
+          <li class="letter-fill" draggable="true" id="${Math.floor(Math.random() * 1000) + 1}">${letter}</li>
+        `).sort( () => 0.5 - Math.random() ).join(" ") }</ul>
       </div>
     `;
 
@@ -35,14 +37,24 @@ function showAnimals() {
   });
 }
 
-// drag e drop das letras
+// drag e drop das letras 
 function dragDrop() {
-  const letterFill = document.getElementsByClassName("letter-fill");
-  const letterEmpty = document.getElementsByClassName("letter-empty");
+  let draggedLetter = null;
 
   for (let i = 0; i < letterFill.length; i++) {
     letterFill[i].addEventListener("dragstart", (e) => {
-      e.dataTransfer.setData("text", e.target.id);
+      draggedLetter = e.target;
+
+      setTimeout(() => {
+        draggedLetter.style.display = "none";
+      })
+    });
+
+    letterFill[i].addEventListener("dragend", (e) => {
+      setTimeout(() => {
+        draggedLetter.style.display = "block";
+        draggedLetter = null;
+      }, 0);
     });
   }
 
@@ -50,15 +62,18 @@ function dragDrop() {
     letterEmpty[j].addEventListener("dragover", (e) => {
       e.preventDefault();
     });
+
+    letterEmpty[j].addEventListener("dragenter", (e) => {
+      e.preventDefault();
+    });
     
     letterEmpty[j].addEventListener("drop", (e) => {
       e.preventDefault();
-      let transfer = e.dataTransfer.getData("text");
-      e.target.appendChild(document.getElementById(transfer));
-    });
 
-    letterEmpty[j].addEventListener("dragend", (e) => {
-      console.log(e.target.textContent)
+      if (e.target.textContent == draggedLetter.textContent) {
+        e.target.append(draggedLetter);
+        draggedLetter.classList.add("dragged-letter");
+      }
     });
   } 
 }
