@@ -89,6 +89,12 @@ function dragDrop() {
       if (e.target.textContent == draggedLetter.textContent) {
         e.target.append(draggedLetter);
         draggedLetter.classList.add("dragged-letter");
+        let successLetterSound = new Audio("../assets/sounds/sound-success-letter.mp3");
+        successLetterSound.currentTime = 1.2;
+        successLetterSound.play();
+      } else {
+        let errorSound = new Audio("../assets/sounds/sound-error.mp3");
+        errorSound.play();
       }
     });
   } 
