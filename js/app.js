@@ -7,6 +7,7 @@ const btnPrev = document.getElementById("prev");
 const btnNext = document.getElementById("next");
 
 showAnimals();
+playMusic();
 dragDrop();
 
 // renderização dos animais na tela
@@ -34,6 +35,21 @@ function showAnimals() {
 
     section.insertAdjacentHTML("beforeend", content);
     container.appendChild(section);
+  });
+}
+
+// música de fundo
+function playMusic() {
+  let audio = new Audio("../assets/sounds/soundtrack-claudio-the-worm.mp3");
+  audio.addEventListener("loadeddata", async (e) => {
+    try {
+      await e.target.play();
+      e.target.volume = 0.5;
+      e.target.loop = true;
+    } catch(err) {
+        console.log(`${err.name}: ${err.message}`);
+        throw alert("Para ouvir a música habilite o áudio no navegador");
+      }
   });
 }
 
