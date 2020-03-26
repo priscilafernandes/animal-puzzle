@@ -1,10 +1,12 @@
 const main = document.getElementById("main");
 const container = document.getElementById("container");
+const wordFill = document.getElementsByClassName("word-fill");
 const letterFill = document.getElementsByClassName("letter-fill");
 const letterEmpty = document.getElementsByClassName("letter-empty");
 const slides = document.getElementsByClassName("slides");
 const btnPrev = document.getElementById("prev");
 const btnNext = document.getElementById("next");
+let slideIndex = 1;
 
 showAnimals();
 playMusic();
@@ -53,12 +55,19 @@ function playMusic() {
   });
 }
 
+// som das letras
+function letterSound(letter) {  
+  let sound = new Audio(`../assets/sounds/letters/${letter}.ogg`);
+  sound.play();
+}
+
 // drag e drop das letras 
 function dragDrop() {
   let draggedLetter = null;
 
   for (let i = 0; i < letterFill.length; i++) {
     letterFill[i].addEventListener("dragstart", (e) => {
+      letterSound(e.target.textContent);
       draggedLetter = e.target;
 
       setTimeout(() => {
@@ -71,6 +80,8 @@ function dragDrop() {
         draggedLetter.style.display = "block";
         draggedLetter = null;
       }, 0);
+
+      wordSuccess();
     });
   }
 
@@ -87,21 +98,28 @@ function dragDrop() {
       e.preventDefault();
 
       if (e.target.textContent == draggedLetter.textContent) {
-        e.target.append(draggedLetter);
-        draggedLetter.classList.add("dragged-letter");
         let successLetterSound = new Audio("../assets/sounds/sound-success-letter.mp3");
-        successLetterSound.currentTime = 1.2;
-        successLetterSound.play();
+        
+        setTimeout(() => {
+          successLetterSound.currentTime = 1.5;
+          successLetterSound.play();
+          successLetterSound.volume = 0.7;
+        }, 200);
+
+        e.target.append(draggedLetter);
+        draggedLetter.classList.add("dragged-letter");        
       } else {
         let errorSound = new Audio("../assets/sounds/sound-error.mp3");
-        errorSound.play();
+        
+        setTimeout(() => {
+          errorSound.play();
+        }, 200)        
       }
     });
-  } 
+  }
 }
 
 // slideshow dos animais
-let slideIndex = 1;
 showSlides(slideIndex);
 
 btnPrev.addEventListener("click", (n) => {
@@ -129,5 +147,17 @@ function showSlides(n) {
     slides[i].style.display = "none";
   }
    
-  slides[slideIndex-1].style.display = "block";
+  slides[slideIndex-1].style.display = "block";  
 } 
+
+// acertou a palavra
+function wordSuccess() {
+  let currentWord = wordFill[slideIndex-1].children;
+  let successWordSound = new Audio("../assets/sounds/sound-success-word.mp3");
+
+  if (currentWord.length == 0 || currentWord.length < 1) {
+    setTimeout(() => {
+      successWordSound.play();
+    }, 1000)
+  }
+}
