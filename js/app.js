@@ -9,6 +9,7 @@ const btnNext = document.getElementById("next");
 let slideIndex = 1;
 
 showAnimals();
+lettersRandomPosition(letterFill, 1);
 playMusic();
 dragDrop();
 
@@ -26,18 +27,55 @@ function showAnimals() {
         <img src="./assets/img/${item.img}" alt=${item.name} class="img-animal">
 
         <ul class="word-empty">${word.map(letter => `
-          <li class="letter-empty" id="${Math.floor(Math.random() * 1000) + 1}">${letter}</li>
+          <li class="letter-empty">${letter}</li>
         `).join(" ")}</ul>
 
         <ul class="word-fill">${word.map(letter => `
-          <li class="letter-fill" draggable="true" id="${Math.floor(Math.random() * 1000) + 1}">${letter}</li>
-        `).sort( () => 0.5 - Math.random() ).join(" ") }</ul>
+          <li class="letter-fill" draggable="true">${letter}</li>
+        `).sort( () => 0.5 - Math.random() ).join(" ") }</ul>        
       </div>
     `;
 
     section.insertAdjacentHTML("beforeend", content);
     container.appendChild(section);
   });
+}
+
+// posição das letras (bug ao fazer drop da letra)
+function lettersRandomPosition(targetLetter, valid) {
+  // valid 0 = false, valid 1 = true
+
+  targetLetter = letterFill;
+
+  let positionRandom = {
+    top: (wordFill.offsetTop) + (Math.random() * 100) + 80,
+    left: (wordFill.offsetLeft) - (container.offsetLeft) + (Math.random() * 20) + 1,
+    angle: (Math.random() * 30) - 10
+  };
+
+  let positionDefault = {
+    top: 0,
+    left: 0,
+    angle: 0
+  }
+
+  if (valid == 1) {
+    for (i in targetLetter) {
+      targetLetter[i].style = `
+        top: ${positionRandom.top}px;
+        transform: rotate(${positionRandom.angle}deg);
+        left: ${positionRandom.left}px
+      `;
+    }
+  } else if (valid == 0) {
+    for (j in targetLetter) {
+      targetLetter[j].style = `
+        top: ${positionDefault.top}px;
+        transform: rotate(${positionDefault.angle}deg);
+        left: ${positionDefault.left}px
+      `;
+    }
+  }  
 }
 
 // música de fundo
@@ -79,6 +117,8 @@ function dragDrop() {
       setTimeout(() => {
         draggedLetter.style.display = "block";
         draggedLetter = null;
+
+        lettersRandomPosition(draggedLetter, 0);
       }, 0);
 
       wordSuccess();
@@ -109,11 +149,17 @@ function dragDrop() {
         e.target.append(draggedLetter);
         draggedLetter.classList.add("dragged-letter");        
       } else {
-        let errorSound = new Audio("../assets/sounds/sound-error.mp3");
+        let errorSound = new Audio("../assets/sounds/sound-error-2.mp3");
         
         setTimeout(() => {
+          errorSound.currentTime = 0.55;
           errorSound.play();
-        }, 200)        
+          errorSound.volume = 0.3;
+        }, 200);
+
+        setTimeout(() => {
+          errorSound.pause();
+        }, 950);
       }
     });
   }
@@ -153,11 +199,16 @@ function showSlides(n) {
 // acertou a palavra
 function wordSuccess() {
   let currentWord = wordFill[slideIndex-1].children;
-  let successWordSound = new Audio("../assets/sounds/sound-success-word.mp3");
+  let successWordSound = new Audio("../assets/sounds/sound-success-word-2.mp3");
 
   if (currentWord.length == 0 || currentWord.length < 1) {
     setTimeout(() => {
+      successWordSound.currentTime = 0.4;
       successWordSound.play();
-    }, 1000)
+    }, 500);
+
+    setTimeout(() => {
+      successWordSound.pause();
+    }, 2500);
   }
 }
