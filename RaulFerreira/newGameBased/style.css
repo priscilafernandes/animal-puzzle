@@ -26,13 +26,24 @@ article {
     justify-content: center;
     align-items: center;
 }
+footer{
+    display: inline-block;
+}
+
+#options{
+    width: 16%;
+    height: 20%;
+    border: 1px solid white;
+    background-image: green;
+    position: absolute;
+}
 #container {
     background:url(assets/img/bg.png) no-repeat top center;
     width:800px;
-    height:550px;
+    height:360px;
     margin:40px auto 0 auto;
     position:relative;
-    padding:50px 0 0 0;
+    padding:30px 0 0 5px;
 }
 #models {
     margin:0 auto;
@@ -55,7 +66,7 @@ article {
     text-align:center;
 }
 #letters li {
-    background:#FFF;
+    background:rgb(255, 255, 255);
     background:-moz-linear-gradient( #FFF, #AAA );
     background:-webkit-gradient( linear, left top, left bottom, color-stop( 0, #FFF ), color-stop( 1, #AAA ) );
     background:-o-linear-gradient(top, #FFF, #AAA);
@@ -66,6 +77,8 @@ article {
 }
 #letters li.draggable {
     cursor:move;
+    margin: 0 30px;
+    position: absolute
 }
 #models {
     margin-top:30px;	
@@ -112,4 +125,46 @@ article {
     font-size:200%;
     cursor:pointer;
     padding:0 5px;
+}
+
+#ad {
+    position:absolute;	
+    right:10px;
+    bottom:10px;
+    padding:10px;
+    background:#FFF;
+    background:-moz-linear-gradient( #FFF, #DDD );
+    background:-webkit-gradient( linear, left top, left bottom, color-stop( 0, #FFF ), color-stop( 1, #DDD ) );
+    background:-o-linear-gradient(top, #FFF, #DDD);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD');
+    border:1px solid #FFF;
+    box-shadow:0px 2px 10px #000; -moz-box-shadow:0px 2px 10px #000; -webkit-box-shadow:0px 2px 10px #000;
+    border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;
+    font:11px/1.5 Arial, Helvetica, sans-serif;
+}
+#ad a {
+    text-decoration:none !important;
+}
+.bsa_it_i,
+.bsa_it_t,
+.bsa_it_d,
+.bsa_it_p2 {
+    display:block;
+    padding:3px 0;
+}
+.bsa_it_t {
+    font:18px 'Yanone Kaffeesatz', Arial, Serif;
+    color:#8B1361;
+}
+.bsa_it_d {
+    color:#111;
+    width:130px;
+    font-weight:normal;
+}
+.bsa_it_p2 {
+    color:#555 !important;
+    font-weight:normal !important;
+}
+.bsa_it_p {
+    display:none;
 }
